@@ -1,7 +1,7 @@
 # Troubleshooting Guide
 
 ## Introduction   
-This section is designed to guide you in troubleshooting any issues that may arise while performing the Raft Replication test cases in this Live Labs environment. It provides assistance to help you resolve common challenges effectively.
+This section is designed to guide you in troubleshooting any issues that may arise while performing the Raft Replication test cases in this Live Labs environment. It aids in helping you to resolve common challenges effectively.
 
 *Estimated Time*:  30 minutes
 
@@ -18,6 +18,66 @@ This lab assumes you have:
     - Lab: Prepare Setup (*Free-tier* and *Paid Tenants* only)
     - Lab: Environment Setup
     - Lab: Initialize Environment
+
+## Validate the podman containers are running as expected
+
+1. In general, before any troubleshooting steps, open a terminal session and Verify Oracle Sharding container Details
+
+    ```
+    <copy>
+    sudo podman ps -a
+    </copy>
+    ```
+
+    ![<podman_containers>](./images/podman-containers.png " ")
+
+2. If a container is stopped and not in running state then try to restart it by using below docker command.
+
+    ```
+    <copy>
+    sudo podman stop <container ID/NAME>
+    </copy>
+    <copy>
+    sudo podman start <container ID/NAME>
+    </copy>
+    ```
+
+    - For multiple containers, run the following to restart all at once:
+
+    ```
+    <copy>
+    sudo podman container stop $(sudo podman container list -qa)
+    </copy>
+    <copy>
+    sudo podman container start $(sudo podman container list -qa)
+    </copy>
+    ```
+
+## Verify Raft Demo UI application is running
+
+1. How to check if Raft Demo UI application is running?
+
+    ```
+    <copy>
+    ps -ef | grep raftLiveLabsApp
+    </copy>
+    ```
+   ![<verify_raft_ui_app>](./images/verify_raft_ui_app.png " ")
+
+2. For some reasons if you want to restart the Raft Demo UI, it can be stopped then started:
+    ```
+    <copy>
+    ps -ef | grep raftLiveLabsApp
+    kill -9 <pid of process resulting from above command>
+    ps -ef | grep raftLiveLabsApp
+    sudo podman stop applcient
+    sudo podman start appclient
+    ps -ef | grep raftLiveLabsApp
+    </copy>
+    ```
+
+    Confirm from browser using http://localhost:8080 that Raft Demo UI application is running.
+
 
 ## Scenarios: Guide for Raft Replication Test Cases
 
@@ -133,10 +193,10 @@ This lab assumes you have:
     This application has no explicit mapping for /error, so you are seeing this as a fallback.
     ```
 
-   Please wait and go slow with the delete process. Rapid clicks can cause errors, so allow the operation to complete before clicking again.
+   Please wait and go slow with the delete process. Multiple clicks can cause errors, so allow the operation to complete before clicking again.
 
 
 ## Acknowledgements
-* **Authors** - Deeksha Sehgal, Oracle Globally Distributed Database Database, Product Management, Senior Product Manager
-* **Contributors** - Pankaj Chandiramani, Shefali Bhargava, Ajay Joshi, Jyoti Verma
-* **Last Updated By/Date** - Deeksha Sehgal, Oracle Globally Distributed Database, Product Management, Senior Product Manager, Aug 2024
+* **Authors** - Deeksha Sehgal, Ajay Joshi, Oracle Globally Distributed Database, Product Management
+* **Contributors** - Pankaj Chandiramani, Shefali Bhargava, Param Saini, Jyoti Verma
+* **Last Updated By/Date** - Ajay Joshi, Oracle Globally Distributed Database, Product Management, March 2026

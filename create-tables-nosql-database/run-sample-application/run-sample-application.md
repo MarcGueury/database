@@ -8,7 +8,7 @@ Estimated Lab Time: 10 Minutes
 
 ### About Oracle NoSQL Database Cloud Service
 
-Oracle NoSQL Database Cloud Service is a fully managed database cloud service that handles large amounts of data at high velocity. Developers can start using this service in minutes by following the simple steps outlined in this tutorial. To get started with the service, you create a table. Oracle NoSQL Database supports Java, Python, Node.js, Go, and C#.
+Oracle NoSQL Database Cloud Service is a fully managed database cloud service that handles large amounts of data at high velocity. Developers can start using this service in minutes by following the simple steps outlined in this tutorial. To get started with the service, you create a table. Oracle NoSQL Database supports Java, Python, Node.js, Go, C#, and Rust.
 
 ### Prerequisites
 
@@ -151,6 +151,49 @@ You can add the SDK NuGet Package as a reference to your project by using .Net C
     ```
   </if>
 
+<if type="Rust">
+
+1.  Open the [Rust download page](https://www.rust-lang.org/tools/install) in your browser and download Rust using the instructions given. This creates a `~/.cargo/bin` directory where all the required tools are installed.
+
+2.  Add the PATH directory in your environment variables.
+    ```
+    <copy>
+    export PATH=~/.cargo/bin:$PATH
+    </copy>
+    ```
+
+3.  Verify the installation using
+    ```
+    <copy>
+    rustc --version
+    </copy>
+    ```
+
+4.  Create a new project directory using
+    ```
+    <copy>
+    cargo new HelloWorld
+    </copy>
+    ```
+
+5.  Navigate to the project directory and update the Cargo.toml file as shown below.
+    ```
+    <copy>
+    [package]
+    name = "HelloWorldRust"
+    version = "0.1.0"
+    edition = "2024"
+
+    [dependencies]
+    tokio = { version = "1.38.0", features = ["full"] }
+    chrono = { version = "0.4.31", features = ["alloc", "std"] }
+    oracle-nosql-rust-sdk = { version = "0.1" }
+    tracing = "0.1.40"
+    tracing-subscriber =  { version = "0.3", features = ["env-filter", "std"] }
+    </copy>
+    ```
+</if>
+
 ## Task 2: Download, build, and run the sample application
 
 <if type="Java">
@@ -170,19 +213,11 @@ You can add the SDK NuGet Package as a reference to your project by using .Net C
     </copy>
     ```
 
-  Use `vi` or `nano` or any text editor to create a file named `config` in the `.oci` directory. Copy the following content to the `config` file.
+  Use `vi` or `nano` or any text editor to create a file named `config` in the `.oci` directory. Copy the configuration file parameters from your note file to the `config` file. You saved these parameters into a note file in Lab 1.
 
-    ```
-    <copy>
-    [DEFAULT]
-    user=USER-OCID
-    fingerprint=FINGERPRINT-VALUE
-    tenancy=TENANCY-OCID
-    key_file=<Location of the private key oci_api_key_private.pem>
-    pass_phrase=PASSPHRASE
-    </copy>
-    ```
-  Replace [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five) with the value you copied on your notepad, FINGERPRINT-VALUE with your API key fingerprint, TENANCY-OCID with your [tenancy OCID](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five). The [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) is the private key that you generated. Replace the PASSPHRASE with the passphrase that you entered. You should have noted these values in a text file as you've been working through this workshop.  Use the values recorded from Lab 1.
+  The `config` file will include the [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), fingerprint value, [TENANCY-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), region, and key file. Update the [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) with the private key that you generated. 
+  
+  Include the **pass_phrase** parameter with the passphrase value that you entered in Lab 1. 
   ![View config file](images/config-file.png)
   When `SignatureProvider` is constructed without any parameters, the default [Configuration File](https://docs.cloud.oracle.com/iaas/Content/API/Concepts/sdkconfig.htm) is located in the `~/.oci/config` directory.
 
@@ -206,19 +241,11 @@ You can add the SDK NuGet Package as a reference to your project by using .Net C
 
    Oracle NoSQL Database Cloud Service tables are created in a compartment and are scoped to that compartment. It is recommended not to create tables in the "root" compartment, but to create them in your own compartment created under "root". Edit the code in HelloWorld.py file, replace the placeholder of the compartment in the function ```set_default_compartment``` with the OCID of your compartment. Replace the placeholder for region with the name of your region. Save the file and close it.
 
-3. From your home directory, navigate to ".oci" directory. Create a file named `config` in the `.oci` directory. Copy the following content to the `config` file.
+3. From your home directory, navigate to ".oci" directory. Create a file named `config` in the `.oci` directory. Copy the configuration file parameters from your note file to the `config` file. You saved these parameters into a note file in Lab 1.
 
-    ```
-    <copy>
-    [DEFAULT]
-    user=USER-OCID
-    fingerprint=FINGERPRINT-VALUE
-    tenancy=TENANCY-OCID
-    key_file=<Location of the private key oci_api_key_private.pem>
-    pass_phrase=PASSPHRASE
-    </copy>
-    ```   
-  Replace [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five) with the value you copied on your notepad, FINGERPRINT-VALUE with your API key fingerprint, TENANCY-OCID with your [tenancy OCID](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five). The [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) is the private key that you generated. Replace the PASSPHRASE with the passphrase that you entered. You should have noted these values in a text file as you've been working through this workshop.  Use the values recorded from Lab 1.
+  The `config` file will include the [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), fingerprint value, [TENANCY-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), region, and key file. Update the [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) with the private key that you generated. 
+  
+  Include the **pass_phrase** parameter with the passphrase value that you entered in Lab 1. 
   ![View config file](images/config-file.png)
 
 4. Execute the sample application:
@@ -253,19 +280,11 @@ You can add the SDK NuGet Package as a reference to your project by using .Net C
 
    Oracle NoSQL Database Cloud Service tables are created in a compartment and are scoped to that compartment. It is recommended not to create tables in the "root" compartment, but to create them in your own compartment created under "root". Edit the code in HelloWorld.go file, replace the placeholder of the compartment in the constructor of ```NewSignatureProviderFromFile``` with the OCID of your compartment. Replace the placeholder for region with the name of your region. Save the file and close it.
 
-3. From your home directory, navigate to ".oci" directory. Create a file named `config` in the `.oci` directory. Copy the following content to the `config` file.
+3. From your home directory, navigate to ".oci" directory. Create a file named `config` in the `.oci` directory. Copy the configuration file parameters from your note file to the `config` file. You saved these parameters into a note file in Lab 1.
 
-    ```
-    <copy>
-    [DEFAULT]
-    user=USER-OCID
-    fingerprint=FINGERPRINT-VALUE
-    tenancy=TENANCY-OCID
-    key_file=<Location of the private key oci_api_key_private.pem>
-    pass_phrase=PASSPHRASE
-    </copy>
-    ```
-  Replace [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five) with the value you copied on your notepad, FINGERPRINT-VALUE with your API key fingerprint, TENANCY-OCID with your [tenancy OCID](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five). The [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) is the private key that you generated. Replace the PASSPHRASE with the passphrase that you entered. You should have noted these values in a text file as you've been working through this workshop.  Use the values recorded from Lab 1.
+  The `config` file will include the [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), fingerprint value, [TENANCY-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), region, and key file. Update the [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) with the private key that you generated. 
+  
+  Include the **pass_phrase** parameter with the passphrase value that you entered in Lab 1. 
   ![View config file](images/config-file.png)
 
 4.  Execute the sample application:
@@ -325,19 +344,11 @@ The given code sample in JavaScript and TypeScript use the [ES6 modules](https:/
 
    Oracle NoSQL Database Cloud Service tables are created in a compartment and are scoped to that compartment. It is recommended not to create tables in the "root" compartment, but to create them in your own compartment created under "root". Depending on your application, edit either the JavaScript code in HelloWorld.js or the TypeScript code in HelloWorld.ts, replace the placeholder of the compartment in the ```NoSQLClient``` constructor with the OCID of your compartment. Replace the placeholder for region with the name of your region. Save the file and close it. 
 
-3. From your home directory, navigate to ".oci" directory. Create a file named `config` in the `.oci` directory. Copy the following content to the `config` file. 
+3. From your home directory, navigate to ".oci" directory. Create a file named `config` in the `.oci` directory. Copy the configuration file parameters from your note file to the `config` file. You saved these parameters into a note file in Lab 1.
 
-    ```
-    <copy>  
-    [DEFAULT]
-    user=USER-OCID
-    fingerprint=FINGERPRINT-VALUE
-    tenancy=TENANCY-OCID
-    key_file=<Location of the private key oci_api_key_private.pem>
-    pass_phrase=PASSPHRASE
-    </copy>
-    ```
-   Replace [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five) with the value you copied on your notepad, FINGERPRINT-VALUE with your API key fingerprint, TENANCY-OCID with your [tenancy OCID](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five). The [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) is the private key that you generated. Replace the PASSPHRASE with the passphrase that you entered. You should have noted these values in a text file as you've been working through this workshop. Use the values recorded from Lab 1.
+  The `config` file will include the [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), fingerprint value, [TENANCY-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), region, and key file. Update the [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) with the private key that you generated. 
+  
+  Include the **pass_phrase** parameter with the passphrase value that you entered in Lab 1. 
    ![View config file](images/config-file.png)
 
 4. Execute the Sample Application
@@ -370,19 +381,11 @@ The given code sample in JavaScript and TypeScript use the [ES6 modules](https:/
 
    Oracle NoSQL Database Cloud Service tables are created in a compartment and are scoped to that compartment. It is recommended not to create tables in the "root" compartment, but to create them in your own compartment created under "root". Edit the code in HelloWorld.cs file, replace the placeholder of the compartment in the ```NoSQLClient``` constructor with the OCID of your compartment. Replace the placeholder for region with the name of your region. Save the file and close it.
 
-3. From your home directory, navigate to ".oci" directory. Create a file named `config` in the `.oci` directory. Copy the following content to the `config` file.
+3. From your home directory, navigate to ".oci" directory. Create a file named `config` in the `.oci` directory. Copy the configuration file parameters from your note file to the `config` file. You saved these parameters into a note file in Lab 1.
 
-    ```
-    <copy>
-    [DEFAULT]
-    user=USER-OCID
-    fingerprint=FINGERPRINT-VALUE
-    tenancy=TENANCY-OCID
-    key_file=<Location of the private key oci_api_key_private.pem>
-    pass_phrase=PASSPHRASE
-    </copy>
-    ```
-  Replace [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five) with the value you copied on your notepad, FINGERPRINT-VALUE with your API key fingerprint, TENANCY-OCID with your [tenancy OCID](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five). The [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) is the private key that you generated. Replace the PASSPHRASE with the passphrase that you entered. You should have noted these values in a text file as you've been working through this workshop.  Use the values recorded from Lab 1.
+  The `config` file will include the [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), fingerprint value, [TENANCY-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), region, and key file. Update the [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) with the private key that you generated. 
+  
+  Include the **pass_phrase** parameter with the passphrase value that you entered in Lab 1. 
   ![View config file](images/config-file.png)
 
 4. Go to your project directory. You will see the example source code ```Program.cs```. Remove this file.
@@ -402,6 +405,42 @@ The given code sample in JavaScript and TypeScript use the [ES6 modules](https:/
     </copy>
     ```
 *Note: In the RunBasicExample method of `HelloWorld.cs`, the section to drop table is commented out to allow you to see the result of creating the tables in the Oracle Cloud Console.*    
+</if>
+
+<if type="Rust">
+
+1.  Download the [HelloWorld.rs](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/n/c4u04/b/nosql-cloud-service/o/helloworld-rsHelloWorld.rs) file, navigate to the `HelloWorld/src` folder, and replace the contents of `main.rs` with those from the downloaded file. Edit the `main.rs` file in editor using
+    ```
+    <copy>
+    vi main.rs
+    </copy>
+    ```
+
+2.  Review the sample application. You can access the [Rust Reference Guide](https://docs.rs/oracle-nosql-rust-sdk/latest/oracle_nosql_rust_sdk/index.html) to reference Rust classes and methods included in this sample application.
+
+    Oracle NoSQL Database Cloud Service tables are created in a compartment and are scoped to that compartment. It is recommended not to create tables in the "root" compartment, but to create them in your own compartment created under "root". Edit the code in main.rs file, replace the placeholder of the compartment in the builder class with the OCID of your compartment. Save the file and close it.
+
+3.  From your home directory, navigate to ".oci" directory. Create a file named `config` in the `.oci` directory. Copy the configuration file parameters from your note file to the `config` file. You saved these parameters into a note file in Lab 1.
+
+  The `config` file will include the [USER-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), fingerprint value, [TENANCY-OCID] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five), region, and key file. Update the [key_file] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#How) with the private key that you generated. 
+  
+  Include the **pass_phrase** parameter with the passphrase value that you entered in Lab 1. 
+  ![View config file](images/config-file.png)
+
+4.  Navigate back to the project directory and build then run your project using
+    ```
+    <copy>
+    cargo build
+    </copy>
+    ```
+    
+    ```
+    <copy>
+    cargo run
+    </copy>
+    ```
+
+*Note: In `HelloWorld.rs`, the code for dropping the table is commented out to allow you to see the result of creating the tables in the Oracle Cloud Console.* 
 </if>
 
 ## Task 3: Explore tables using the Oracle Cloud Infrastructure Console
@@ -446,8 +485,11 @@ This application accesses Oracle NoSQL Database Cloud Service, but most likely y
 <if type="C-sharp">
 * [.NET API  Reference Guide](https://oracle.github.io/nosql-dotnet-sdk/index.html)
 </if>
+<if type="Rust">
+* [Rust Reference Guide](https://docs.rs/oracle-nosql-rust-sdk/0.1.1/oracle_nosql_rust_sdk/)
+</if>
 
 ## Acknowledgements
 * **Author** - Dave Rubin, Senior Director, NoSQL and Embedded Database Development and Michael Brey, Director, NoSQL Product Development
 * **Contributors** - Jaden McElvey, Technical Lead - Oracle LiveLabs Intern
-* **Last Updated By/Date** - Aayushi Arora, Database User Assistance, March 2025
+* **Last Updated By/Date** - Aayushi Arora, Database User Assistance, January 2026
